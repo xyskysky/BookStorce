@@ -3,7 +3,7 @@ package com.jwn.bookstore.dao.impl;
 import com.jwn.bookstore.dao.UserDAO;
 import com.jwn.bookstore.domain.User;
 
-public class UserDALImpl extends BaseDAO<User> implements UserDAO
+public class UserDAOImpl extends BaseDAO<User> implements UserDAO
 {
 
 	@Override
