@@ -24,7 +24,7 @@ public class Page<T>
 	/**
 	 * 共有多少条记录
 	 */
-	private int totalItemNumber;
+	private long totalItemNumber;
 	
 	/**
 	 * 构造函数初始化pageNo
@@ -77,7 +77,7 @@ public class Page<T>
 	 */
 	public int getTotalPageNumber()
 	{
-		int pageNumber=totalItemNumber/pageSize;
+		int pageNumber=(int)totalItemNumber/pageSize;
 		if(totalItemNumber%pageNumber!=0)
 		{
 			pageNumber++;
@@ -88,7 +88,7 @@ public class Page<T>
 	 * 设置总记录条数
 	 * @param totalItemNumber
 	 */
-	public void setTotalItemNumber(int totalItemNumber)
+	public void setTotalItemNumber(long totalItemNumber)
 	{
 		this.totalItemNumber = totalItemNumber;
 	}
