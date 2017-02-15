@@ -77,19 +77,17 @@ public class Book
 	{
 		this.remark = remark;
 	}
-	public Book(Integer id, String author, String title, float price, Date publishingDate, int salesAmount,
-			int storeNumber, String remark)
+	@Override
+	public String toString()
 	{
-		super();
-		this.id = id;
-		this.author = author;
-		this.title = title;
-		this.price = price;
-		this.publishingDate = publishingDate;
-		this.salesAmount = salesAmount;
-		this.storeNumber = storeNumber;
-		this.remark = remark;
+		return "Book [id=" + id + ", author=" + author + ", title=" + title
+				+ ", price=" + price + ", publishingDate=" + publishingDate
+				+ ", salesAmount=" + salesAmount + ", storeNumber="
+				+ storeNumber + ", remark=" + remark + "]";
+		
+
 	}
+	
 	
 	
 }

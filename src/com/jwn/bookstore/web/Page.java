@@ -20,7 +20,7 @@ public class Page<T>
 	/**
 	 * 每页显示多少条记录
 	 */
-	private int pageSize=5;
+	private int pageSize=3;
 	/**
 	 * 共有多少条记录
 	 */
@@ -55,6 +55,10 @@ public class Page<T>
 	{
 		return pageSize;
 	}
+	public void setPageSize(int pageSize)
+	{
+		this.pageSize = pageSize;
+	}
 	/**
 	 * 设置当前页要显示的记录条数
 	 * @param list
@@ -78,7 +82,8 @@ public class Page<T>
 	public int getTotalPageNumber()
 	{
 		int pageNumber=(int)totalItemNumber/pageSize;
-		if(totalItemNumber%pageNumber!=0)
+	
+		if(totalItemNumber%pageSize!=0)
 		{
 			pageNumber++;
 		}

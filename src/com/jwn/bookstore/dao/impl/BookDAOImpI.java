@@ -19,15 +19,16 @@ public class BookDAOImpI extends BaseDAO<Book> implements BookDAO
 	}
 
 	@Override
-	public Page<Book> getPage(CriteriaBook cb)
+	public Page<Book> getPage(CriteriaBook cb,int pageSize)
 	{
 		Page<Book> page=new Page<Book>(cb.getPageNo());
+		page.setPageSize(pageSize);
 		//设置总记录条数
 		page.setTotalItemNumber(getTotalBookNumber(cb));
 		//校验
 		cb.setPageNo(page.getPageNo());
-	
-		page.setList(getPageList(cb, 3));
+		page.setList(getPageList(cb, pageSize));
+		
 		return page;
 	}
 

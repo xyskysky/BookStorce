@@ -20,7 +20,7 @@ public interface BookDAO
 	 * @param cb
 	 * @return
 	 */
-	Page<Book> getPage(CriteriaBook cb);
+	Page<Book> getPage(CriteriaBook cb,int pageSize);
 	
 	/**
 	 * 根据传入的CriteraBook 返回其对应的记录条数
