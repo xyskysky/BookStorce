@@ -2,6 +2,8 @@ package com.jwn.bookstore.servlet;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.jwn.bookstore.domain.Book;
 import com.jwn.bookstore.domain.ShoppingCart;
 import com.jwn.bookstore.service.BookService;
@@ -58,6 +61,88 @@ public class BookServlet extends HttpServlet
 			e.printStackTrace();
 		}
 
+	}
+	protected void updateItemQuantity(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		String idStr=request.getParameter("id");
+		String quantityStr=request.getParameter("quantity");
+		int id=-1;
+		int quantity=-1;
+		
+
+		try
+		{
+			quantity=Integer.parseInt(quantityStr);
+			id=Integer.parseInt(idStr);
+		}
+		catch (NumberFormatException e)
+		{
+		}
+		ShoppingCart shoppingCart=BookStoreWebUtils.getShoppingCart(request);
+		Map<String, Object> hashMap=new HashMap<String,Object>();
+		if(quantity>0 &&id>0)
+		{
+			hashMap=bookService.updateItemQuantity(shoppingCart, id, quantity);	
+		}
+		else
+		{
+			hashMap.put("status", 0);
+			hashMap.put("storeNumber", 0);
+		}
+		
+		
+		hashMap.put("bookNumber", shoppingCart.getBookNumber());
+		hashMap.put("totalMoney", shoppingCart.getTotalMoney());
+		Gson gson=new Gson();
+		String json = gson.toJson(hashMap);
+		System.out.println(json);
+		response.setContentType("text/javascript");
+		response.getWriter().print(json);
+		
+	}
+	
+	
+	protected void clear(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		ShoppingCart shoppingCart=BookStoreWebUtils.getShoppingCart(request);
+	    bookService.clearShoppingCart(shoppingCart);
+	    request.getRequestDispatcher("/WEB-INF/pages/emptycart.jsp").forward(request, response);
+	}
+	
+	protected void delete(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		String idStr=request.getParameter("id");//图书的ID
+		
+		int id=-1;
+		try
+		{
+			id=Integer.parseInt(idStr);
+		}
+		catch (NumberFormatException e)
+		{
+		}
+		//先获取购物车
+		ShoppingCart shoppingCart=BookStoreWebUtils.getShoppingCart(request);
+		bookService.removeItemFromShoppingCart(shoppingCart, id);
+		if(shoppingCart.isEmpty())
+		{
+			request.getRequestDispatcher("/WEB-INF/pages/emptycart.jsp").forward(request, response);
+		}
+		else
+		{
+			request.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(request, response);
+		}
+		
+		
+	}
+	protected void forwardPage(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		String page=request.getParameter("page");
+		request.getRequestDispatcher("/WEB-INF/pages/"+page+".jsp").forward(request, response);
 	}
 	//添加购物车
 	protected void addToCart(HttpServletRequest request,

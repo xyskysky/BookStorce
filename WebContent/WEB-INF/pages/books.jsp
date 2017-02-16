@@ -7,13 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="script/jquery-1.7.2.min.js"></script>
+<%@ include file="/commons/condition.jsp"%>
 <script type="text/javascript">
 	$(function() {
-		$("a").click(function() {
-			var serializeVal = $(":hidden").serialize();
-
-			this.href = this.href + "&" + serializeVal;
-		});
 		//转到处理
 		$("#pageNo")
 				.change(
@@ -47,8 +43,7 @@
 </head>
 <body>
 	<center>
-		<input type="hidden" name="minPrice" value="${param.minPrice}">
-		<input type="hidden" name="maxPrice" value="${param.maxPrice}">
+		
 		<h1>加入购物车</h1>
 		<c:if test="${param.title!=null}">
 		  您已经将：<span style="color: green;">${param.title}</span>添加到购物车
@@ -57,7 +52,7 @@
 	
 		<c:if test="${!empty sessionScope.shoppingCart.books}">
 		   您的购物车中有：${sessionScope.shoppingCart.bookNumber} 件商品&nbsp;
-		   <a href="">查看购物车</a>
+		   <a href="bookServlet?method=forwardPage&page=cart&pageNo=${bookpage.pageNo}">查看购物车</a>
 		   	<br>
 		</c:if>
         <br>

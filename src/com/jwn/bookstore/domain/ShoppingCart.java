@@ -1,6 +1,7 @@
 package com.jwn.bookstore.domain;
 
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,14 @@ public class ShoppingCart
 	public boolean hasBook(Integer id){
 		return books.containsKey(id);
 	}		
-		
+	/**
+	 * 获取所有的明细信息
+	 * @return
+	 */
+	public Collection<ShoppingCartItem> getItems()
+	{
+		return books.values();
+	}
 	/**
 	 * 修改购物车中的数量
 	 * @param id

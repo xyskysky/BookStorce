@@ -1,5 +1,8 @@
 package com.jwn.bookstore.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.jwn.bookstore.dao.BookDAO;
 import com.jwn.bookstore.dao.impl.BookDAOImpI;
 import com.jwn.bookstore.domain.Book;
@@ -28,5 +31,31 @@ public class BookService
 			return true;
 		}
 		return false;
+	}
+	public void removeItemFromShoppingCart(ShoppingCart shoppingCart,int id)
+	{
+		shoppingCart.removeItem(id);
+	}
+	public void clearShoppingCart(ShoppingCart shoppingCart)
+	{
+		shoppingCart.clear();
+	}
+	public Map<String,Object> updateItemQuantity(ShoppingCart shoppingCart,int id,int quantity)
+	{
+		Map<String, Object> hashMap=new HashMap<String,Object>();
+		//²é¿´¿â´æ
+		int storeNumber = bookDao.getStoreNumber(id);
+		if(quantity>storeNumber)
+		{
+			hashMap.put("status", -1);
+			
+		}
+		else
+		{
+			shoppingCart.updateItemQuantity(id, quantity);
+			hashMap.put("status", 200);
+		}
+		hashMap.put("storeNumber", storeNumber);
+		return hashMap;
 	}
 }
