@@ -1,8 +1,10 @@
 package com.jwn.bookstore.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.jwn.bookstore.domain.Book;
+import com.jwn.bookstore.domain.ShoppingCartItem;
 import com.jwn.bookstore.web.CriteriaBook;
 import com.jwn.bookstore.web.Page;
 
@@ -43,4 +45,11 @@ public interface BookDAO
 	 * @return
 	 */
 	int getStoreNumber(Integer id);
+	
+	/**
+	 * 根据传入的 ShoppingCartItem 的集合, 
+	 * 批量更新 books 数据表的 storenumber 和 salesnumber 字段的值
+	 * @param items
+	 */
+	void batchUpdateStoreNumberAndSalesAmount(Collection<ShoppingCartItem> items);
 }

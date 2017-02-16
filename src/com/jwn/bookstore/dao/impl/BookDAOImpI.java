@@ -1,9 +1,12 @@
 package com.jwn.bookstore.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.jwn.bookstore.dao.BookDAO;
 import com.jwn.bookstore.domain.Book;
+import com.jwn.bookstore.domain.ShoppingCartItem;
 import com.jwn.bookstore.web.CriteriaBook;
 import com.jwn.bookstore.web.Page;
 
@@ -56,6 +59,21 @@ public class BookDAOImpI extends BaseDAO<Book> implements BookDAO
 	{
 		String sql="SELECT storeNumber FROM mybooks WHERE id=?;";
 		return getSingleVal(sql,id);
+	}
+
+	@Override
+	public void batchUpdateStoreNumberAndSalesAmount(Collection<ShoppingCartItem> items)
+	{
+		String sql="update mybooks set storeNumber=storeNumber-?,salesAmount=salesAmount+? where id=?;";
+		Object[][] params=new Object[items.size()][3];
+		List<ShoppingCartItem> list=new ArrayList<ShoppingCartItem>(items);
+		for(int i=0;i<list.size();i++)
+		{
+			params[i][0]=list.get(i).getQuantity();
+			params[i][1]=list.get(i).getQuantity();
+			params[i][2]=list.get(i).getBook().getId();
+		}
+		batch(sql, params);
 	}
 	
 	

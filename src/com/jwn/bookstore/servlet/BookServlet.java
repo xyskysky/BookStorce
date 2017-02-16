@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +18,6 @@ import com.jwn.bookstore.utils.TextUtils;
 import com.jwn.bookstore.web.BookStoreWebUtils;
 import com.jwn.bookstore.web.CriteriaBook;
 import com.jwn.bookstore.web.Page;
-import com.sun.deploy.uitoolkit.impl.fx.ui.CertificateDialog.CertificateInfo;
-import com.sun.glass.ui.Menu;
-import com.sun.prism.shader.Texture_LinearGradient_PAD_AlphaTest_Loader;
 
 /**
  * Servlet implementation class BookServlet
