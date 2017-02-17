@@ -11,9 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.jwn.bookstore.domain.Account;
 import com.jwn.bookstore.domain.Book;
 import com.jwn.bookstore.domain.ShoppingCart;
+import com.jwn.bookstore.domain.ShoppingCartItem;
+import com.jwn.bookstore.domain.User;
+import com.jwn.bookstore.service.AccountService;
 import com.jwn.bookstore.service.BookService;
+import com.jwn.bookstore.service.UserService;
 import com.jwn.bookstore.utils.TextUtils;
 import com.jwn.bookstore.web.BookStoreWebUtils;
 import com.jwn.bookstore.web.CriteriaBook;
@@ -58,6 +63,122 @@ public class BookServlet extends HttpServlet
 		}
 
 	}
+	UserService userService=new UserService();
+	//进行结账
+	protected void cash(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		System.out.println("cash====================================执行了");
+		String username=request.getParameter("username");//用户名
+		String accountid=request.getParameter("accountid");//信用卡号
+		
+		
+		System.out.println("username:"+username+"===========accountid:"+accountid);
+		//先验证是否为空
+		StringBuilder errors=validationFormField(username,accountid);
+		//表单验证通过
+		if(errors.toString().equals(""))
+		{
+			//验证用户名和信用卡账号是否匹配
+			errors=validationUser(username,accountid);
+			if(errors.toString().equals(""))
+			{
+				//验证库存
+				errors=validateBookStoreNumber(request);
+				if(errors.toString().equals(""))
+				{
+					//验证账号的钱数
+					errors=validateBalance(request,accountid);
+				}
+			}
+		}
+		//验证没有通过
+		if(!errors.toString().equals(""))
+		{
+			request.setAttribute("error", errors.toString());
+			request.getRequestDispatcher("/WEB-INF/pages/cash.jsp").forward(request, response);
+			return;
+		}
+		System.out.println("errors:==================="+errors.toString());
+		//进行结账处理
+		bookService.cash(request,username,accountid);
+		response.sendRedirect(request.getContextPath()+"/success.jsp");
+		
+	}
+
+	AccountService accountService=new AccountService();
+	private StringBuilder validateBalance(HttpServletRequest request,
+			String accountid)
+	{
+		StringBuilder errors=new StringBuilder("");
+		ShoppingCart cart=BookStoreWebUtils.getShoppingCart(request);
+		Account account=accountService.getAccount(Integer.parseInt(accountid));
+		if(account!=null)
+		{
+			if(account.getBalance()<cart.getTotalMoney())
+			{
+				errors.append("您的余额不足!");
+			}
+		}
+		else
+		{
+			errors.append("信用卡号不存在!");
+		}
+		return errors;
+	}
+
+	private StringBuilder validateBookStoreNumber(HttpServletRequest request)
+	{
+		ShoppingCart shoppingCart=BookStoreWebUtils.getShoppingCart(request);
+		StringBuilder errors=new StringBuilder("");
+		
+		for(ShoppingCartItem item:shoppingCart.getItems())
+		{
+			Book book=bookService.getBook(item.getBook().getId());
+			if(item.getQuantity()>book.getStoreNumber())
+			{
+				errors.append(book.getTitle()+":库存不足,剩余库存："+book.getStoreNumber());
+			}
+		}
+		
+		
+		return errors;
+	}
+
+	private StringBuilder validationUser(String username, String accountid)
+	{
+		StringBuilder errors=new StringBuilder("");
+		User user=userService.getUserByUserName(username);
+		boolean flag=false;
+		if(user!=null)
+		{
+			int accountid2 = user.getAccountid();
+			if(accountid.trim().equals(""+accountid2))
+			{
+				flag=true;
+			}
+		}
+		if(!flag)
+		{
+			errors.append("用户名和账号不匹配<br>");
+		}
+		return errors;
+	}
+
+	private StringBuilder validationFormField(String username, String accountid)
+	{
+		StringBuilder errors=new StringBuilder("");
+		if(TextUtils.isEmpty(username))
+		{
+			errors.append("用户姓名不能为空!<br>");
+		}
+		if(TextUtils.isEmpty(accountid))
+		{
+			errors.append("信用卡号不能为空!<br>");
+		}
+		return errors;
+	}
+
 	protected void updateItemQuantity(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{

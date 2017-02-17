@@ -59,10 +59,14 @@
 		<form action="bookServlet?method=getBooks" method="post">
 			Price: <input type="text" name="minPrice" />--- <input type="text"
 				name="maxPrice"> <input id="btn" type="submit" value="查找">
-
+				
 		</form>
+		<form action="user.jsp">
+		     <input type="submit" value="查看购物明细">
+		</form>
+		
 		<br>
-		<table cellpadding="10" border="1" cellspacing="1">
+		<table cellpadding="10" border="1" cellspacing="0">
 			<thead>
 				<tr>
 					<th>名称</th>

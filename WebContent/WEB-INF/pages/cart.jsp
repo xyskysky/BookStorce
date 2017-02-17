@@ -109,7 +109,7 @@
 				<td colspan="4"><a
 					href="bookServlet?method=getBooks&pageNo=${param.pageNo}">继续购物</a>&nbsp;&nbsp;&nbsp;
 					<a href="bookServlet?method=clear&pageNo=${param.pageNo}">清空购物车</a>&nbsp;&nbsp;&nbsp;
-					<a href="">结账</a></td>
+					<a href="bookServlet?method=forwardPage&page=cash&pageNo=${param.pageNo}">结账</a></td>
 			</tr>
 		</table>
 
